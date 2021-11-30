@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="CommonLibrary" />
         <module name="Server" />
+        <module name="Client" />
       </profile>
     </annotationProcessing>
   </component>
