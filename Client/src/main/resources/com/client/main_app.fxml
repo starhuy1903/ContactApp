@@ -18,10 +18,12 @@
 <BorderPane fx:id="mainPanel" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.client.Controller">
     <center>
+
         <ImageView fx:id="contactLogo" fitHeight="200.0" fitWidth="150.0" pickOnBounds="true"
                    preserveRatio="true">
 
         </ImageView>
+
         <TableView fx:id="contactsTable" onMouseClicked="#showProfileImage">
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
@@ -90,7 +92,8 @@
 
             <ImageView fx:id="profileImageView" fitHeight="200.0" fitWidth="150.0" pickOnBounds="true"
                        preserveRatio="true" GridPane.rowIndex="5" GridPane.columnSpan="2"></ImageView>
-            <Button fx:id="buttonSaveImage" GridPane.halignment="CENTER" onAction="#saveImage" text="Save Image"/>
+            <Button fx:id="buttonSaveImage" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.halignment="CENTER" onAction="#saveImage" text="Save Image"/>
+
         </GridPane>
     </right>
 </BorderPane>

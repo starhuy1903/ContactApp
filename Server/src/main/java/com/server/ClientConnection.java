@@ -15,7 +15,6 @@ public class ClientConnection extends Thread{
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 
-
     public ClientConnection(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;

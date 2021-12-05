@@ -8,11 +8,11 @@ import java.util.List;
 
 public class ContactData {
 
-    public static final String DB_NAME = "contact";
+    public static final String DB_NAME = "yourdatabase";
     public static final String CONNECTION_STRING = "jdbc:mysql://localhost:3306/" + DB_NAME;
 
-    public static final String DB_USERNAME = "root";
-    public static final String DB_PASSWORD = "75184641";
+    public static final String DB_USERNAME = "yourusername";
+    public static final String DB_PASSWORD = "yourpassword";
 
     public static final String TABLE_CONTACTS = "contacts";
     public static final String COLUMN_CONTACT_ID = "contact_id";

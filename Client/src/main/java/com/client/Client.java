@@ -40,27 +40,6 @@ public class Client {
         }
     }
 
-//    public void receiveContactFromServer(TableView<Contact> contactsTable) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while(socket.isConnected()) {
-//                    try {
-//                        Contact contact = (Contact) inputStream.readObject();
-//                        contactsTable.refresh();
-//                        contactsTable.getItems().add(contact);
-////                        System.out.println(contact.getName());
-//                    } catch(IOException | ClassNotFoundException e) {
-//                        e.printStackTrace();
-//                        System.out.println("Error receiving contact from the server");
-//                        closeEverything(socket, inputStream, outputStream);
-//                        break;
-//                    }
-//                }
-//            }
-//        }).start();
-//    }
-
     public void receiveContactListFromServer(TableView<Contact> contactsTable) {
         new Thread(new Runnable() {
             @Override
@@ -71,6 +50,7 @@ public class Client {
                         for(Contact contact: contacts) {
                             contactsTable.getItems().add(contact);
                         }
+                        contactsTable.refresh();
                     } catch(IOException | ClassNotFoundException e) {
                         e.printStackTrace();
                         System.out.println("Error receiving contact from the server");

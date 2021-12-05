@@ -9,12 +9,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 
 public class Controller implements Initializable {
 
@@ -55,12 +58,10 @@ public class Controller implements Initializable {
         buttonSaveImage.setVisible(false);
         buttonSend.setDisable(true);
         contactsTable.setVisible(false);
-//        buttonConnect.setDisable(false);
+        buttonConnect.setDisable(false);
 
 
-        File imageFile = new File("images/contact_logo.png");
-        Image logo = new Image(imageFile.toURI().toString());
-        contactLogo.setImage(logo);
+
     }
 
     @FXML
@@ -71,7 +72,7 @@ public class Controller implements Initializable {
             try {
                 client = new Client(new Socket("localhost", portNumber));
                 System.out.println("Connected to server.");
-//                buttonConnect.setDisable(true);
+                buttonConnect.setDisable(true);
                 buttonDisconnect.setDisable(false);
                 buttonSend.setDisable(false);
                 profileImageView.setVisible(true);
@@ -99,6 +100,7 @@ public class Controller implements Initializable {
         client.sendPhoneNumberToServer(CLOSE_CONNECT_MSG);
         client.closeEverything();
 
+        buttonConnect.setDisable(false);
         buttonDisconnect.setDisable(true);
         buttonSend.setDisable(true);
 
@@ -111,8 +113,10 @@ public class Controller implements Initializable {
         if (!messageToSend.isEmpty()) {
             client.sendPhoneNumberToServer(messageToSend);
             contactsTable.getItems().clear();
-            client.receiveContactListFromServer(contactsTable);
+            profileImageView.setVisible(false);
+            buttonSaveImage.setVisible(false);
             tf_search.clear();
+            client.receiveContactListFromServer(contactsTable);
         }
     }
 
@@ -128,12 +132,17 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void saveImage() {
-        File saveFile = new File("/home/huy/Downloads/ContactProject");
+    public void saveImage() throws IOException {
+        Contact contact = contactsTable.getSelectionModel().getSelectedItem();
 
-//        try {
-//            ImageIO.write
-//        }
+        InputStream inputStream = new ByteArrayInputStream(contact.getProfileImage());
+
+        String imageName = contact.getName().split(" ")[0];
+
+        BufferedImage bufferedImage = ImageIO.read(inputStream);
+        File saveFile = new File("/home/huy/Downloads/ContactProject/" + imageName + ".png");
+        ImageIO.write(bufferedImage, "png", saveFile);
+
     }
 
     public void displayNotifyMessage(String message) {

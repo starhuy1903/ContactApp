@@ -13,7 +13,6 @@ import java.util.List;
 public class Server {
 
     private ServerSocket serverSocket;
-//    private Socket socket;
     private static int numberClient = 0;
 
     public static String CLOSE_CONNECT_MSG = "close";
@@ -71,10 +70,12 @@ public class Server {
                             clientConnection.closeConnect();
                             break;
                         }
+                        // take contact by phone number
                         Contact contact = ContactData.getInstance().queryContactByPhoneNumber(phoneNumber.getText());
                         List<Contact> contacts = new ArrayList<>();
                         contacts.add(contact);
 
+                        // return contact to client
                         sendContactListToClient(contacts, clientConnection.getOutputStream());
 //                        Controller.addLabel("Client searched " + phoneNumber.getText(), vBox);
                     } catch (IOException | ClassNotFoundException e) {
