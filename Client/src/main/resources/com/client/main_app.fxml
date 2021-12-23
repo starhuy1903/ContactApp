@@ -15,14 +15,16 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ProgressBar?>
 <BorderPane fx:id="mainPanel" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.client.Controller">
     <center>
 
-        <ImageView fx:id="contactLogo" fitHeight="200.0" fitWidth="150.0" pickOnBounds="true"
-                   preserveRatio="true">
+<!--        <ImageView fx:id="contactLogo" fitHeight="200.0" fitWidth="150.0" pickOnBounds="true"-->
+<!--                   preserveRatio="true">-->
 
-        </ImageView>
+<!--        </ImageView>-->
 
         <TableView fx:id="contactsTable" onMouseClicked="#showProfileImage">
             <columnResizePolicy>
@@ -59,10 +61,10 @@
             </padding>
             <Label fx:id="notifyLabel" GridPane.halignment="CENTER" GridPane.rowIndex="0"
                    GridPane.columnIndex="0" GridPane.columnSpan="2"></Label>
-            <Label text="Server Port" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextField fx:id="tf_port" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+<!--            <Label text="Server Port" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0"/>-->
+            <TextField fx:id="tf_port" promptText="Server Port" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
             <Button fx:id="buttonConnect" onAction="#connectServer" GridPane.halignment="CENTER" text="Connect"
-                    GridPane.rowIndex="2"
+                    GridPane.rowIndex="1"
                     GridPane.columnIndex="0">
                 <graphic>
                     <ImageView>
@@ -71,7 +73,7 @@
                 </graphic>
             </Button>
             <Button fx:id="buttonDisconnect" GridPane.halignment="CENTER" onAction="#disconnectServer"
-                    text="Disconnect" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                    text="Disconnect" GridPane.rowIndex="2" GridPane.columnIndex="0">
                 <graphic>
                     <ImageView>
                         <Image url="@/toolbarButtonGraphics/general/Stop24.gif"/>
@@ -79,10 +81,10 @@
                 </graphic>
             </Button>
 
-            <Label text="Phone Number" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <TextField fx:id="tf_search" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-            <Button fx:id="buttonSend" GridPane.halignment="CENTER" onAction="#sendPhoneNumberToServer" text="Search"
-                    GridPane.rowIndex="4" GridPane.columnIndex="0">
+<!--            <Label text="Phone Number" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.columnIndex="0"/>-->
+            <TextField fx:id="tf_search" promptText="Contact Id" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Button fx:id="buttonSend" GridPane.halignment="CENTER" onAction="#sendContactIdToServer" text="Search"
+                    GridPane.rowIndex="3" GridPane.columnIndex="0">
                 <graphic>
                     <ImageView>
                         <Image url="@/toolbarButtonGraphics/general/Find24.gif"/>
@@ -94,6 +96,15 @@
                        preserveRatio="true" GridPane.rowIndex="5" GridPane.columnSpan="2"></ImageView>
             <Button fx:id="buttonSaveImage" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.halignment="CENTER" onAction="#saveImage" text="Save Image"/>
 
+            <HBox alignment="CENTER" GridPane.rowIndex="6" GridPane.columnSpan="2" GridPane.rowSpan="2" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <children>
+                    <ProgressBar fx:id="progressBar" visible="false" prefWidth="200.0" progress="0.0">
+                        <HBox.margin>
+                            <Insets left="50.0" />
+                        </HBox.margin>
+                    </ProgressBar>
+                </children>
+            </HBox>
         </GridPane>
     </right>
 </BorderPane>

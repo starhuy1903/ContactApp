@@ -26,7 +26,7 @@ public class ClientConnection extends Thread{
             inputStream = new ObjectInputStream(socket.getInputStream());
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             server.sendContactListToClient(ContactData.getInstance().queryContacts(), outputStream);
-            server.receivePhoneNumberFromClient(this);
+            server.receiveContactIdFromClient(this);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error running client connection");

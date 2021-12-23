@@ -2,6 +2,10 @@ package com.client;
 
 import com.datamodel.Contact;
 import com.datamodel.Message;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableView;
 
 import java.io.IOException;
@@ -29,36 +33,64 @@ public class Client {
         }
     }
 
-    public void sendPhoneNumberToServer(String phoneNumber) {
+    public void sendContactIdToServer(String contactId) {
         try {
             // send phone number to server
-            outputStream.writeObject(new Message(phoneNumber));
+            outputStream.writeObject(new Message(contactId));
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error sending phone number to server");
+            System.out.println("Error sending contact id to server");
             closeEverything();
         }
     }
 
-    public void receiveContactListFromServer(TableView<Contact> contactsTable) {
-        new Thread(new Runnable() {
+    public void receiveContactListFromServer(TableView<Contact> contactsTable, ProgressBar progressBar) {
+        Task<ObservableList<Contact>> task = new Task<ObservableList<Contact>>() {
             @Override
-            public void run() {
-                if(socket.isConnected()) {
+            protected ObservableList<Contact> call() throws Exception {
+                if (socket.isConnected()) {
                     try {
                         List<Contact> contacts = (List<Contact>) inputStream.readObject();
-                        for(Contact contact: contacts) {
-                            contactsTable.getItems().add(contact);
-                        }
-                        contactsTable.refresh();
-                    } catch(IOException | ClassNotFoundException e) {
+                        Thread.sleep(100);
+                        return FXCollections.observableArrayList(contacts);
+                    } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
                         System.out.println("Error receiving contact from the server");
                         closeEverything();
                     }
                 }
+//                Controller.displayNotifyMessage("Not found");
+                return null;
             }
-        }).start();
+        };
+        contactsTable.itemsProperty().bind(task.valueProperty());
+        progressBar.progressProperty().bind(task.progressProperty());
+
+        progressBar.setVisible(true);
+
+        task.setOnSucceeded(e -> progressBar.setVisible(false));
+        task.setOnFailed(e -> progressBar.setVisible(false));
+
+        new Thread(task).start();
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(socket.isConnected()) {
+//                    try {
+//                        List<Contact> contacts = (List<Contact>) inputStream.readObject();
+//                        for(Contact contact: contacts) {
+//                            contactsTable.getItems().add(contact);
+//                        }
+////                        contactsTable.refresh();
+//                    } catch(IOException | ClassNotFoundException e) {
+//                        e.printStackTrace();
+//                        System.out.println("Error receiving contact from the server");
+//                        closeEverything();
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     public void closeEverything() {

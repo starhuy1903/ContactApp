@@ -34,19 +34,6 @@ public class Server {
         }
     }
 
-//    @Override
-//    public void run() {
-//        try {
-//
-//            receivePhoneNumberFromClient(vbox_messages);
-//            sendContactListToClient(ContactData.getInstance().queryContacts());
-//        } catch(IOException e) {
-//            System.out.println("Error creating server");
-//            e.printStackTrace();
-//            closeEverything(socket, inputStream, outputStream);
-//        }
-//    }
-
     public void sendContactListToClient(List<Contact> contacts, ObjectOutputStream outputStream) {
         try {
             // send contacts to the client
@@ -57,7 +44,7 @@ public class Server {
         }
     }
 
-    public void receivePhoneNumberFromClient(ClientConnection clientConnection) {
+    public void receiveContactIdFromClient(ClientConnection clientConnection) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -65,13 +52,13 @@ public class Server {
                     try {
                         // Read phone number from the client to search
                         // Bug here
-                        Message phoneNumber = (Message) clientConnection.getInputStream().readObject();
-                        if(phoneNumber.getText().equals(CLOSE_CONNECT_MSG)){
+                        Message contactId = (Message) clientConnection.getInputStream().readObject();
+                        if(contactId.getText().equals(CLOSE_CONNECT_MSG)){
                             clientConnection.closeConnect();
                             break;
                         }
                         // take contact by phone number
-                        Contact contact = ContactData.getInstance().queryContactByPhoneNumber(phoneNumber.getText());
+                        Contact contact = ContactData.getInstance().queryContactByContactId(contactId.getText());
                         List<Contact> contacts = new ArrayList<>();
                         contacts.add(contact);
 

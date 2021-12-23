@@ -27,8 +27,8 @@ public class Controller implements Initializable {
     private TextField tf_port;
     @FXML
     private ImageView profileImageView;
-    @FXML
-    private ImageView contactLogo;
+//    @FXML
+//    private ImageView contactLogo;
     @FXML
     private Button buttonConnect;
     @FXML
@@ -45,8 +45,10 @@ public class Controller implements Initializable {
     private ScrollPane sp_main;
     @FXML
     private TableView<Contact> contactsTable;
+    @FXML
+    private ProgressBar progressBar;
 
-    private boolean disableButtonDisconnect;
+//    private boolean disableButtonDisconnect;
 
     private Client client;
 
@@ -59,8 +61,6 @@ public class Controller implements Initializable {
         buttonSend.setDisable(true);
         contactsTable.setVisible(false);
         buttonConnect.setDisable(false);
-
-
 
     }
 
@@ -76,15 +76,17 @@ public class Controller implements Initializable {
                 buttonDisconnect.setDisable(false);
                 buttonSend.setDisable(false);
                 profileImageView.setVisible(true);
-                contactLogo.setVisible(false);
+//                contactLogo.setVisible(false);
                 contactsTable.setVisible(true);
 
                 displayNotifyMessage("Connected to server!");
             } catch (IOException e) {
                 e.printStackTrace();
+                displayNotifyMessage("Failed connected to the server!");
+                tf_port.clear();
             }
             contactsTable.getItems().clear();
-            client.receiveContactListFromServer(contactsTable);
+            client.receiveContactListFromServer(contactsTable, progressBar);
         }
     }
 
@@ -94,10 +96,10 @@ public class Controller implements Initializable {
         profileImageView.setVisible(false);
         buttonSaveImage.setVisible(false);
         contactsTable.setVisible(false);
-        contactLogo.setVisible(true);
+//        contactLogo.setVisible(true);
 
         tf_port.clear();
-        client.sendPhoneNumberToServer(CLOSE_CONNECT_MSG);
+        client.sendContactIdToServer(CLOSE_CONNECT_MSG);
         client.closeEverything();
 
         buttonConnect.setDisable(false);
@@ -108,26 +110,28 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void sendPhoneNumberToServer() {
+    public void sendContactIdToServer() {
         String messageToSend = tf_search.getText();
         if (!messageToSend.isEmpty()) {
-            client.sendPhoneNumberToServer(messageToSend);
             contactsTable.getItems().clear();
             profileImageView.setVisible(false);
             buttonSaveImage.setVisible(false);
             tf_search.clear();
-            client.receiveContactListFromServer(contactsTable);
+            client.sendContactIdToServer(messageToSend);
+            client.receiveContactListFromServer(contactsTable, progressBar);
         }
     }
 
     @FXML
     public void showProfileImage() {
+
         Contact contact = contactsTable.getSelectionModel().getSelectedItem();
         if (contact != null) {
             ByteArrayInputStream bis = new ByteArrayInputStream(contact.getProfileImage());
             Image image = new Image(bis);
             profileImageView.setImage(image);
             buttonSaveImage.setVisible(true);
+            profileImageView.setVisible(true);
         }
     }
 
@@ -142,6 +146,7 @@ public class Controller implements Initializable {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         File saveFile = new File("/home/huy/Downloads/ContactProject/" + imageName + ".png");
         ImageIO.write(bufferedImage, "png", saveFile);
+        displayNotifyMessage("Saved image successfully!");
 
     }
 
